@@ -40,7 +40,7 @@ pipeline {
 		
 		stage("Docker Push Images") {
             steps {
-				docker.withRegistry( '', registryCredential )
+				//docker.withRegistry( '', registryCredential )
 			    //sh "docker login -u ${DOCKER_USER_N} -p ${DOCKER_USER_P}"
 				sh "docker tag ${APP_NAME}:latest ${DOCKER_USER_N}/${APP_NAME}:${IMAGE_VERSION}"
 				sh "docker push ${DOCKER_USER_N}/${APP_NAME}:${IMAGE_VERSION}"
@@ -59,7 +59,7 @@ pipeline {
 		
 		stage("Deploy") {
             steps {
-				docker.withRegistry( '', registryCredential )
+				//docker.withRegistry( '', registryCredential )
                 sh "docker pull ${DOCKER_USER_N}/${APP_NAME}:${IMAGE_VERSION}"
 				sh "docker run --name ${APP_NAME} -p ${LOCAL_PORT}:${APP_PORT} -d ${DOCKER_USER_N}/${APP_NAME}:${IMAGE_VERSION}"
             }
