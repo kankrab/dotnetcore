@@ -33,6 +33,7 @@ pipeline {
 	stage("Test") {
             steps {
                 sh "docker run --name ${APP_NAME} -p ${LOCAL_PORT}:${APP_PORT} -d ${APP_NAME}:${IMAGE_VERSION}"
+		sh "sleep 10"
                 sh "curl -v 23.96.105.95:${LOCAL_PORT}"
 		sh "docker stop ${APP_NAME}"
             }
