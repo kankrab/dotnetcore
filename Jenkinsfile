@@ -51,10 +51,10 @@ pipeline {
         }
 		
 	stage("Docker Clean Images & Containers") {
-            steps {		
-		sh "docker rmi ${APP_NAME}:${IMAGE_VERSION} ${DOCKER_USER_N}/${APP_NAME}:${IMAGE_VERSION}"
-		//sh "docker rmi ${DOCKER_USER_N}/${APP_NAME}:${IMAGE_VERSION}"
+            steps {
 		sh "docker rm -v \$(docker ps -aq -f status=exited)"
+		sh "docker rmi ${APP_NAME}:${IMAGE_VERSION} ${DOCKER_USER_N}/${APP_NAME}:${IMAGE_VERSION}"
+		//sh "docker rmi ${DOCKER_USER_N}/${APP_NAME}:${IMAGE_VERSION}"		
 		sh "docker rmi \$(docker images | grep none | awk '{print \$3}')"
 		sh "docker images | grep ${APP_NAME} | grep ${IMAGE_VERSION}"
             }
