@@ -41,11 +41,13 @@ pipeline {
 		
 	stage("Docker Push Images") {
             steps {
+		withDockerRegistry([ credentialsId: 'dockerhub', url: "" ]) {
 		//docker.withRegistry( '', registryCredential )
 		//sh "docker login -u ${DOCKER_USER_N} -p ${DOCKER_USER_P}"
 		sh "docker tag ${APP_NAME}:${IMAGE_VERSION} ${DOCKER_USER_N}/${APP_NAME}:${IMAGE_VERSION}"
 		sh "docker push ${DOCKER_USER_N}/${APP_NAME}:${IMAGE_VERSION}"
 		sh "docker push ${DOCKER_USER_N}/${APP_NAME}:latest"
+		}
             }
         }
 		
