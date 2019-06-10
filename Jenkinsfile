@@ -7,9 +7,9 @@ pipeline {
 	
 	environment {	
 	registryCredential = 'dockerhub'
-    APP_NAME = 'dotnetcore_app'
-    BUILD_NUMBER = "${env.BUILD_NUMBER}"
-    IMAGE_VERSION="v_${BUILD_NUMBER}"
+    	APP_NAME = 'dotnetcore_app'
+    	BUILD_NUMBER = "${env.BUILD_NUMBER}"
+    	IMAGE_VERSION="v_${BUILD_NUMBER}"
 	LOCAL_PORT='9000'
 	APP_PORT='80'
 	DOCKER_USER_N='pisutp'
@@ -25,43 +25,43 @@ pipeline {
 
         stage("Build images") {
             steps {               
-				sh "docker build -t ${APP_NAME}:${IMAGE_VERSION} ."
-				sh "docker images | grep ${APP_NAME}"               
+		sh "docker build -t ${APP_NAME}:${IMAGE_VERSION} ."
+		sh "docker images | grep ${APP_NAME}"               
             }
         }
 		
-		stage("Test") {
+	stage("Test") {
             steps {
                 sh "docker docker run --name ${APP_NAME} -p ${LOCAL_PORT}:${APP_PORT} -d ${APP_NAME}:${IMAGE_VERSION}"
                 sh "curl -v localhost:${LOCAL_PORT}"
-				sh "docker stop ${APP_NAME}"
+		sh "docker stop ${APP_NAME}"
             }
         }
 		
-		stage("Docker Push Images") {
+	stage("Docker Push Images") {
             steps {
-				//docker.withRegistry( '', registryCredential )
-			    //sh "docker login -u ${DOCKER_USER_N} -p ${DOCKER_USER_P}"
-				sh "docker tag ${APP_NAME}:latest ${DOCKER_USER_N}/${APP_NAME}:${IMAGE_VERSION}"
-				sh "docker push ${DOCKER_USER_N}/${APP_NAME}:${IMAGE_VERSION}"
-				sh "docker push ${DOCKER_USER_N}/${APP_NAME}:latest"
+		//docker.withRegistry( '', registryCredential )
+		//sh "docker login -u ${DOCKER_USER_N} -p ${DOCKER_USER_P}"
+		sh "docker tag ${APP_NAME}:latest ${DOCKER_USER_N}/${APP_NAME}:${IMAGE_VERSION}"
+		sh "docker push ${DOCKER_USER_N}/${APP_NAME}:${IMAGE_VERSION}"
+		sh "docker push ${DOCKER_USER_N}/${APP_NAME}:latest"
             }
         }
 		
-		stage("Docker Clean Images & Containers") {
+	stage("Docker Clean Images & Containers") {
             steps {
-				//sh "docker rm -v $(docker ps -aq -f status=exited)"
-				sh "docker rmi ${DOCKER_USER_N}/${APP_NAME}:${IMAGE_VERSION} ${DOCKER_USER_N}/${APP_NAME}:latest"
-				//sh "docker rmi $(docker images | grep "^<none>" | awk "{print $3}") || true"
-				sh "docker images | grep ${APP_NAME} | grep ${IMAGE_VERSION}"
+		//sh "docker rm -v $(docker ps -aq -f status=exited)"
+		sh "docker rmi ${DOCKER_USER_N}/${APP_NAME}:${IMAGE_VERSION} ${DOCKER_USER_N}/${APP_NAME}:latest"
+		//sh "docker rmi $(docker images | grep "^<none>" | awk "{print $3}") || true"
+		sh "docker images | grep ${APP_NAME} | grep ${IMAGE_VERSION}"
             }
         }
 		
-		stage("Deploy") {
+	stage("Deploy") {
             steps {
-				//docker.withRegistry( '', registryCredential )
+		//docker.withRegistry( '', registryCredential )
                 sh "docker pull ${DOCKER_USER_N}/${APP_NAME}:${IMAGE_VERSION}"
-				sh "docker run --name ${APP_NAME} -p ${LOCAL_PORT}:${APP_PORT} -d ${DOCKER_USER_N}/${APP_NAME}:${IMAGE_VERSION}"
+		sh "docker run --name ${APP_NAME} -p ${LOCAL_PORT}:${APP_PORT} -d ${DOCKER_USER_N}/${APP_NAME}:${IMAGE_VERSION}"
             }
         }
 
