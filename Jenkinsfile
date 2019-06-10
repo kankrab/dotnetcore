@@ -8,7 +8,7 @@ pipeline {
 	//registryCredential = 'dockerhub'
     	APP_NAME = 'dotnetcore_app'
     	BUILD_NUMBER = "${env.BUILD_NUMBER}"
-    	IMAGE_VERSION="v_1.${BUILD_NUMBER}"
+    	IMAGE_VERSION="v_1.1.${BUILD_NUMBER}"
 	LOCAL_PORT='9000'
 	APP_PORT='80'
 	DOCKER_USER_N='pisutp'
