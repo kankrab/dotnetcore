@@ -1,12 +1,11 @@
 pipeline {
     agent any
-
     options {
 	timeout(time: 1, unit: 'HOURS') 
     }
 	
-	environment {	
-	registryCredential = 'dockerhub'
+    environment {	
+	//registryCredential = 'dockerhub'
     	APP_NAME = 'dotnetcore_app'
     	BUILD_NUMBER = "${env.BUILD_NUMBER}"
     	IMAGE_VERSION="v_${BUILD_NUMBER}"
@@ -19,7 +18,7 @@ pipeline {
     //WS_PROJECT_TOKEN='zwzxtyeBntxX4ixHD1iE2dOr4DVFHPp7D0Czn84DEF4='
     //HIPCHAT_TOKEN = 'SpVaURsSTcWaHKulZ6L4L+sjKxhGXCkjSbcqzL42ziU='
     //HIPCHAT_ROOM = 'NotificationRoomName'
-	}
+    }
 
     stages {
 
@@ -62,8 +61,7 @@ pipeline {
         }
 		
 	stage("Deploy") {
-            steps {
-		//docker.withRegistry( '', registryCredential )
+            steps {		
                 sh "docker pull ${DOCKER_USER_N}/${APP_NAME}:${IMAGE_VERSION}"
 		sh "docker run --name ${APP_NAME} -p ${LOCAL_PORT}:${APP_PORT} -d ${DOCKER_USER_N}/${APP_NAME}:${IMAGE_VERSION}"
             }
